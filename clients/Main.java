@@ -12,6 +12,10 @@ import clients.customer.CustomerView;
 import clients.packing.PackingController;
 import clients.packing.PackingModel;
 import clients.packing.PackingView;
+import clients.login.LoginController;
+import clients.login.LoginModel;
+import clients.login.LoginView;
+import clients.login.LoginClient;
 import middle.LocalMiddleFactory;
 import middle.MiddleFactory;
 import javax.swing.*;
@@ -26,8 +30,11 @@ import java.awt.*;
  * @version year-2024
  */
 
-class Main
+public class Main
+
 {
+
+  private MiddleFactory mlf;
   public static void main (String args[])
   {
     new Main().begin();
@@ -38,26 +45,35 @@ class Main
    */
   public void begin()
   {
+
+    mlf = new LocalMiddleFactory();
+
+    new LoginClient(this, mlf);
+
+    JFrame frame = new JFrame("MiniStore"); //Main frame where all clients will be viewed
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setSize(800, 600);
+    frame.setLocationRelativeTo(null);
+
+    JTabbedPane tabbedPane = new JTabbedPane();
+
     //DEBUG.set(true); /* Lots of debug info */
-    MiddleFactory mlf = new LocalMiddleFactory();  // Direct access
-    startCustomerGUI_MVC( mlf );
-    startCashierGUI_MVC( mlf );
-    startCashierGUI_MVC( mlf ); // you can create multiple clients
-    startPackingGUI_MVC( mlf );
-    startBackDoorGUI_MVC( mlf );
+     // Direct access
+
+
   }
-  
+
   /**
-  * start the Customer client, -search product
-  * @param mlf A factory to create objects to access the stock list
-  */
+   * start the Customer client, -search product
+   * @param mlf A factory to create objects to access the stock list
+   */
   public void startCustomerGUI_MVC(MiddleFactory mlf )
   {
     JFrame  window = new JFrame();
     window.setTitle( "Customer Client MVC");
     window.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
     Dimension pos = PosOnScrn.getPos();
-    
+
     CustomerModel model      = new CustomerModel(mlf);
     CustomerView view        = new CustomerView( window, mlf, pos.width, pos.height );
     CustomerController cont  = new CustomerController( model, view );
@@ -77,7 +93,7 @@ class Main
     window.setTitle( "Cashier Client MVC");
     window.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
     Dimension pos = PosOnScrn.getPos();
-    
+
     CashierModel model      = new CashierModel(mlf);
     CashierView view        = new CashierView( window, mlf, pos.width, pos.height );
     CashierController cont  = new CashierController( model, view );
@@ -92,7 +108,7 @@ class Main
    * start the Packing client - for warehouse staff to pack the bought order for customer, one order at a time
    * @param mlf A factory to create objects to access the stock list
    */
-  
+
   public void startPackingGUI_MVC(MiddleFactory mlf)
   {
     JFrame  window = new JFrame();
@@ -100,7 +116,7 @@ class Main
     window.setTitle( "Packing Client MVC");
     window.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
     Dimension pos = PosOnScrn.getPos();
-    
+
     PackingModel model      = new PackingModel(mlf);
     PackingView view        = new PackingView( window, mlf, pos.width, pos.height );
     PackingController cont  = new PackingController( model, view );
@@ -109,7 +125,7 @@ class Main
     model.addObserver( view );       // Add observer to the model
     window.setVisible(true);         // Make window visible
   }
-  
+
   /**
    * start the BackDoor client - store staff to check and update stock
    * @param mlf A factory to create objects to access the stock list
@@ -121,7 +137,7 @@ class Main
     window.setTitle( "BackDoor Client MVC");
     window.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
     Dimension pos = PosOnScrn.getPos();
-    
+
     BackDoorModel model      = new BackDoorModel(mlf);
     BackDoorView view        = new BackDoorView( window, mlf, pos.width, pos.height );
     BackDoorController cont  = new BackDoorController( model, view );
@@ -130,5 +146,5 @@ class Main
     model.addObserver( view );       // Add observer to the model
     window.setVisible(true);         // Make window visible
   }
-  
+
 }
