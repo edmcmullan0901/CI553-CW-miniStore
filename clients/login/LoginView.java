@@ -1,5 +1,6 @@
 package clients.login;
 
+import clients.SoundPlayer;
 import clients.UIStyler;
 
 import javax.swing.*;
@@ -64,6 +65,15 @@ public class LoginView extends JFrame {
 
         loginButton.addActionListener(listener -> {
             System.out.println("Login button clicked");
+            SoundPlayer.playSound("audio/button_press.wav");
+
+
+
+        });
+
+        guestButton.addActionListener(listener -> {
+            System.out.println("Guest button clicked");
+            SoundPlayer.playSound("audio/button_press.wav");  // Play sound on Guest button click
         });
     }
 

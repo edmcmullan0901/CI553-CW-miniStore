@@ -6,7 +6,7 @@ import clients.Picture;
 import clients.login.LoginClient;
 import middle.MiddleFactory;
 import middle.StockReader;
-import clients.Main;
+import clients.SoundPlayer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -122,7 +122,10 @@ public class CustomerView implements Observer
         }
 
         JButton productButton = new JButton(product.getDescription(), productImage);
-        productButton.addActionListener(e -> showProductDetails(product));  // Handle product button click
+        productButton.addActionListener(e -> {
+          SoundPlayer.playSound("audio/button_press.wav");
+          showProductDetails(product);
+                });
         buttonPanel.add(productButton);
 
         productButton.setPreferredSize(new Dimension(400,100));
