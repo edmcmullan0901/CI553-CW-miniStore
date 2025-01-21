@@ -90,14 +90,12 @@ public class LoginView extends JFrame {
     }
 
     public void addLoginListener(ActionListener listener) {
-        clearListeners();
         loginButton.addActionListener(listener);
 
     }
 
     public void addGuestListener(ActionListener listener) {
 
-        clearListeners();
         guestButton.addActionListener(listener);
     }
 

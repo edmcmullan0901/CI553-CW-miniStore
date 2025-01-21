@@ -38,6 +38,8 @@ public class Main
   private boolean cashierStarted = false;
   private boolean customerStarted = false;
   private MiddleFactory mlf;
+  private static Main mainApp;
+  private JFrame window;
 
   public static void main (String args[]) throws StockException {
     new Main().begin();
@@ -100,8 +102,16 @@ public class Main
    */
   public void startCustomerGUI_MVC(MiddleFactory mlf )
   {
+    System.out.println("Starting customer gui");
 
-    if (customerStarted) return;
+    if (customerStarted) {
+        if (window != null) {
+          window.setVisible(true);
+        }
+        return;
+
+
+    }
     customerStarted = true;
     JFrame  window = new JFrame();
     window.setTitle( "Customer Client MVC");
@@ -114,8 +124,8 @@ public class Main
     view.setController( cont );
 
     model.addObserver( view );
-    view.populateProductButtons();// Add observer to the model, ---view is observer, model is Observable
-    window.setVisible(true);         // start Screen
+    view.populateProductButtons();
+    window.setVisible(true);
   }
 
   /**

@@ -1,4 +1,5 @@
 package clients.login;
+import clients.EmployeeMenuView;
 import clients.Main;
 import middle.MiddleFactory;
 import middle.LocalMiddleFactory;
@@ -16,6 +17,7 @@ public class LoginController {
     private LoginView view;
     private Main mainApp;
     private MiddleFactory mlf;
+    private EmployeeMenuView employeeMenuView;
 
     public LoginController(LoginModel model, LoginView view, Main mainApp, MiddleFactory mlf) {
         this.model= model;
@@ -47,37 +49,40 @@ public class LoginController {
                 System.out.println("Login successful, closing login window.");
                 view.setVisible(false);
                 LoginClient.closeLoginView();
-                try {
-                    MiddleFactory mlf = new LocalMiddleFactory();
-                } catch (StockException ex) {
-                    throw new RuntimeException(ex);
-                }
 
-                System.out.println("mainApp before checking if started: " + mainApp);
-                if (mainApp != null) {
-                    if (!mainApp.isCashierStarted()) {
-                        mainApp.startCashierGUI_MVC(mlf);
-                        mainApp.setCashierStarted(true);
-                    }
-                    if (!mainApp.isPackingStarted()) {
-                        mainApp.startPackingGUI_MVC(mlf);
-                        mainApp.setPackingStarted(true);
-                    }
-                    if (!mainApp.isBackDoorStarted()) {
-                        mainApp.startBackDoorGUI_MVC(mlf);
-                        mainApp.setBackDoorStarted(true);
-                    }
+                employeeMenuView = new EmployeeMenuView();
+                employeeMenuView.setVisible(true);
 
-                } else {
-                    System.out.println("mainApp is null when attempting to start other clients.");
-                }
+                employeeMenuView.addCashierButtonListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        startCashierGUI();
+                    }
+                });
+
+                employeeMenuView.addPackingButtonListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        startPackingGUI();
+                    }
+                });
+
+                employeeMenuView.addBackDoorListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        startBackDoorGUI();
+                    }
+                });
+
             } else {
-                JOptionPane.showMessageDialog(view, "Invalid credentials, " +
-                                "please try again",
-                        "Login Error",
-                        JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(view, "Invalid credentials, please try again",
+                        "Login Error", JOptionPane.ERROR_MESSAGE);
 
             }
+
+
+
+
 
         }
 
@@ -88,13 +93,34 @@ public class LoginController {
         public void actionPerformed(ActionEvent e) {
             if (mainApp != null) {
                 System.out.println("Guest login, closing login window.");
-                view.setVisible(false);
-                LoginClient.closeLoginView();
+                LoginClient.getInstance(mainApp, mlf).getView().setVisible(false);
+
+                System.out.println("Starting customer client");
                 mainApp.startCustomerGUI_MVC(mlf);
             }
 
 
 
+        }
+    }
+
+
+    private void startCashierGUI() {
+        if (!mainApp.isCashierStarted()) {
+            mainApp.startCashierGUI_MVC(mlf);
+            mainApp.setCashierStarted(true);
+        }
+    }
+    private void startPackingGUI() {
+        if (!mainApp.isPackingStarted()) {
+            mainApp.startPackingGUI_MVC(mlf);
+            mainApp.setPackingStarted(true);
+        }
+    }
+    private void startBackDoorGUI() {
+        if (!mainApp.isBackDoorStarted()) {
+            mainApp.startBackDoorGUI_MVC(mlf);
+            mainApp.setBackDoorStarted(true);
         }
     }
 }

@@ -38,8 +38,7 @@ public class LoginClient {
 
             view.setVisible(true);
             isLoginViewOpen = true;
-        } else {
-            view.setVisible(true);
+
         }
     }
 
@@ -49,31 +48,44 @@ public class LoginClient {
     }
 
     public static LoginClient getInstance(Main mainApp, MiddleFactory mlf) {
-        if (instance == null) {
-            if (mainApp == null) {
-                throw new IllegalArgumentException("mainApp is null");
-            }
-            if (mlf == null) {
-                throw new IllegalArgumentException("mlf is null");
-            }
-            System.out.println("Creating new loginclient instance");
-            instance = new LoginClient(mainApp, mlf);
-        } else {
-            if (instance.view != null && instance.view.isVisible()) {
-                instance.view.setVisible(true);
+        System.out.println("Creating and showing LoginView");
+
+        // If an instance already exists, just show the view
+        if (instance != null) {
+            if (instance.view != null && !instance.view.isVisible()) {
+                System.out.println("Reusing existing LoginView instance and making it visible");
+                instance.view.setVisible(true);  // Make the existing view visible again
+                return instance;
+            } else {
+                System.out.println("Reusing existing LoginView instance and view is visible");
+                return instance;
             }
         }
+
+
+        // If instance is null, create a new one
+        if (instance == null) {
+            if (mainApp == null || mlf == null) {
+                throw new IllegalArgumentException("mainApp or mlf is null");
+            }
+
+            System.out.println("Creating new loginclient instance");
+            instance = new LoginClient(mainApp, mlf);
+        }
+
         return instance;
     }
+
 
 
     public static void closeLoginView() {
         if (instance != null) {
             if (instance.view != null) {
+                System.out.println("Closing login view");
+
                 instance.view.setVisible(false);
             }
-            isLoginViewOpen = false;
-            instance.view.setVisible(false);
+            instance = null;
         }
 
     }

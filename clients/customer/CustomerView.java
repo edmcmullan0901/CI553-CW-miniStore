@@ -81,7 +81,7 @@ public class CustomerView implements Observer
     cp.add(pageTitle);
 
     backButton = new JButton("Back");
-    backButton.setBounds(700,200,150,400);
+    backButton.setBounds(500,200,100,50);
     backButton.addActionListener(e -> logout());
     cp.add(backButton);
 
@@ -146,20 +146,20 @@ public class CustomerView implements Observer
   }
 
   private void logout() {
-
+    System.out.println("Logout triggered");
     if (mainApp == null || mainApp.getMlf() == null) {
       throw new IllegalStateException("MiddleFactory (mlf) is not initialized");
     }
     // Close the current customer view window
     if (parentFrame != null) {
-      parentFrame.setVisible(false);  // Hide the customer view window
-      parentFrame.dispose();  // Close the frame and release resources
+      // Hide the customer view window
+      parentFrame.setVisible(false);
+      System.out.println("customer frame hidden");
     }
-    LoginClient.closeLoginView();
-    LoginClient.getInstance(mainApp, mlf);
 
-    // Ensure a new LoginClient instance is created and the login window is visible
-    // Make the login window visible
+    LoginClient loginClient = LoginClient.getInstance(mainApp, mlf);
+    loginClient.getView().setVisible(true);
+
   }
   /**
    * The controller object, used so that an interaction can be passed to the controller
