@@ -16,6 +16,7 @@ import remote.RemoteStockR_I;
 import javax.swing.*;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
+import java.util.*;
 
 /**
  * Setup connection to the middle tier
@@ -104,5 +105,19 @@ public class F_StockR implements StockReader
       throw new StockException( "Net: " + e.getMessage() );
     }
   }
+
+  @Override
+  public List<Product> getProductNumbers() throws StockException {
+    if (aR_StockR == null) connect(); // Ensure connection
+    try {
+      return aR_StockR.getProductNumbers();
+    } catch (RemoteException e) {
+      throw new StockException("Network issue: " + e.getMessage());
+    }
+  }
+
+
+
+
 
 }

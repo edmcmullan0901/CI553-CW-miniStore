@@ -9,7 +9,10 @@ import middle.StockException;
 import middle.StockReader;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.Observable;
+import java.util.List;
+import java.awt.*;
 
 /**
  * Implements the Model of the customer client
@@ -24,6 +27,9 @@ public class CustomerModel extends Observable
   private StockReader     theStock     = null;
   private OrderProcessing theOrder     = null;
   private ImageIcon       thePic       = null;
+  private JPanel productPanel;
+  private List<Product> productList;
+  private List<JButton> productButtons;
 
   /*
    * Construct the model of the Customer
@@ -31,17 +37,23 @@ public class CustomerModel extends Observable
    */
   public CustomerModel(MiddleFactory mf)
   {
-    try                                          // 
-    {  
-      theStock = mf.makeStockReader();           // Database access
+    try                                          //
+    {
+      this.theStock = mf.makeStockReader();
+      this.productPanel = new JPanel();
+
+      productList = new ArrayList<>();
+      productButtons = new ArrayList<>();
+      // Database access
     } catch ( Exception e )
     {
       DEBUG.error("CustomerModel.constructor\n" +
                   "Database not created?\n%s\n", e.getMessage() );
     }
-    theBasket = makeBasket();                    // Initial Basket
+    theBasket = makeBasket();
+    // Initial Basket
   }
-  
+
   /**
    * return the Basket of products
    * @return the basket of products
@@ -67,8 +79,8 @@ public class CustomerModel extends Observable
       {                                         // T
         Product pr = theStock.getDetails( pn ); //  Product
         if ( pr.getQuantity() >= amount )       //  In stock?
-        { 
-          theAction =                           //   Display 
+        {
+          theAction =                           //   Display
             String.format( "%s : %7.2f (%2d) ", //
               pr.getDescription(),              //    description
               pr.getPrice(),                    //    price
@@ -104,16 +116,16 @@ public class CustomerModel extends Observable
     thePic = null;                            // No picture
     setChanged(); notifyObservers(theAction);
   }
-  
+
   /**
    * Return a picture of the product
    * @return An instance of an ImageIcon
-   */ 
+   */
   public ImageIcon getPicture()
   {
     return thePic;
   }
-  
+
   /**
    * ask for update of view callled at start
    */
@@ -130,5 +142,9 @@ public class CustomerModel extends Observable
   {
     return new Basket();
   }
+
+
 }
+
+
 

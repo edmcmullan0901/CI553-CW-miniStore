@@ -11,7 +11,7 @@ public class CustomerController
 
   /**
    * Constructor
-   * @param model The model 
+   * @param model The model
    * @param view  The view from which the interaction came
    */
   public CustomerController( CustomerModel model, CustomerView view )
@@ -37,6 +37,6 @@ public class CustomerController
     model.doClear();
   }
 
-  
+
 }
 

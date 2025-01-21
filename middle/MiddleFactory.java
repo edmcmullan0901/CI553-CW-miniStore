@@ -22,6 +22,7 @@ public interface MiddleFactory
    */
   public StockReader makeStockReader() throws StockException;
 
+
   /**
    * Return an object to access the database for read/write access
    * @return instance of StockReadWriter

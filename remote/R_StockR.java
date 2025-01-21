@@ -6,6 +6,7 @@ import middle.StockException;
 
 import javax.swing.*;
 import java.rmi.RemoteException;
+import java.util.List;
 
 // There can only be 1 ResultSet opened per statement
 // so no simultaneous use of the statement object
@@ -51,7 +52,7 @@ public class      R_StockR
   {
     return aStockR.getDetails( pNum );
   }
-  
+
   /**
    * Returns an image of the product
    * BUG However this will not work for distributed version
@@ -64,5 +65,11 @@ public class      R_StockR
   {
     return aStockR.getImage( pNum );
   }
+
+  @Override
+  public List<Product> getProductNumbers() throws RemoteException, StockException {
+    return aStockR.getProductNumbers(); // Call the method in StockR
+  }
+
 
 }

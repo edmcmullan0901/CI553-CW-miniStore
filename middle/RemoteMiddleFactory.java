@@ -33,11 +33,13 @@ public class RemoteMiddleFactory implements MiddleFactory
    * Return an object to access the database for read only access.
    * Access is via RMI
    */
-  
+  @Override
   public StockReader makeStockReader() throws StockException
   {
     return new F_StockR( theStockR_URL );
   }
+
+
 
   /**
    * Return an object to access the database for read/write access.

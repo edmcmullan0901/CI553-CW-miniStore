@@ -12,12 +12,11 @@ import clients.customer.CustomerView;
 import clients.packing.PackingController;
 import clients.packing.PackingModel;
 import clients.packing.PackingView;
-import clients.login.LoginController;
-import clients.login.LoginModel;
-import clients.login.LoginView;
 import clients.login.LoginClient;
 import middle.LocalMiddleFactory;
 import middle.MiddleFactory;
+import middle.StockException;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -34,28 +33,35 @@ public class Main
 
 {
 
+  private boolean backDoorStarted = false;
+  private boolean packingStarted = false;
+  private boolean cashierStarted = false;
+  private boolean customerStarted = false;
   private MiddleFactory mlf;
-  public static void main (String args[])
-  {
+
+  public static void main (String args[]) throws StockException {
     new Main().begin();
   }
+
 
   /**
    * Starts the system (Non distributed)
    */
-  public void begin()
-  {
+  public void begin() throws StockException {
 
     mlf = new LocalMiddleFactory();
+    System.out.println("Main mlf initialized: " + mlf);
+    System.out.println("Main instance before passing: " + this);
+    LoginClient.getInstance(this, mlf);
+    System.out.println("Main instance before passing: " + this);
 
-    new LoginClient(this, mlf);
+
+
 
     JFrame frame = new JFrame("MiniStore"); //Main frame where all clients will be viewed
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setSize(800, 600);
     frame.setLocationRelativeTo(null);
-
-    JTabbedPane tabbedPane = new JTabbedPane();
 
     //DEBUG.set(true); /* Lots of debug info */
      // Direct access
@@ -63,23 +69,52 @@ public class Main
 
   }
 
+  public boolean isCashierStarted() {
+    return cashierStarted;
+  }
+  public boolean isCustomerStarted() {
+    return customerStarted;
+  }
+  public boolean isBackDoorStarted() {
+    return backDoorStarted;
+  }
+  public boolean isPackingStarted() {
+    return packingStarted;
+  }
+
+  public void setCashierStarted(boolean cashierStarted) {
+    this.cashierStarted = cashierStarted;
+  }
+  public void setCustomerStarted(boolean customerStarted) {
+    this.customerStarted = customerStarted;
+  }
+  public void setPackingStarted(boolean packingStarted) {
+    this.packingStarted = packingStarted;
+  }
+  public void setBackDoorStarted(boolean backDoorStarted) {
+    this.backDoorStarted = backDoorStarted;
+  }
   /**
    * start the Customer client, -search product
    * @param mlf A factory to create objects to access the stock list
    */
   public void startCustomerGUI_MVC(MiddleFactory mlf )
   {
+
+    if (customerStarted) return;
+    customerStarted = true;
     JFrame  window = new JFrame();
     window.setTitle( "Customer Client MVC");
     window.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
     Dimension pos = PosOnScrn.getPos();
 
     CustomerModel model      = new CustomerModel(mlf);
-    CustomerView view        = new CustomerView( window, mlf, pos.width, pos.height );
+    CustomerView view        = new CustomerView( window, mlf, pos.width, pos.height, window, this);
     CustomerController cont  = new CustomerController( model, view );
     view.setController( cont );
 
-    model.addObserver( view );       // Add observer to the model, ---view is observer, model is Observable
+    model.addObserver( view );
+    view.populateProductButtons();// Add observer to the model, ---view is observer, model is Observable
     window.setVisible(true);         // start Screen
   }
 
@@ -89,6 +124,8 @@ public class Main
    */
   public void startCashierGUI_MVC(MiddleFactory mlf )
   {
+    if (cashierStarted) return;
+    cashierStarted = true;
     JFrame  window = new JFrame();
     window.setTitle( "Cashier Client MVC");
     window.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
@@ -111,6 +148,8 @@ public class Main
 
   public void startPackingGUI_MVC(MiddleFactory mlf)
   {
+    if (packingStarted) return;
+    packingStarted = true;
     JFrame  window = new JFrame();
 
     window.setTitle( "Packing Client MVC");
@@ -132,6 +171,10 @@ public class Main
    */
   public void startBackDoorGUI_MVC(MiddleFactory mlf )
   {
+
+    if (backDoorStarted) return;
+    backDoorStarted = true;
+
     JFrame  window = new JFrame();
 
     window.setTitle( "BackDoor Client MVC");
@@ -145,6 +188,10 @@ public class Main
 
     model.addObserver( view );       // Add observer to the model
     window.setVisible(true);         // Make window visible
+  }
+
+  public MiddleFactory getMlf() {
+    return mlf;
   }
 
 }

@@ -1,11 +1,14 @@
 package remote;
 
 import catalogue.Product;
+import dbAccess.StockR;
 import dbAccess.StockRW;
 import middle.StockException;
+import middle.LocalMiddleFactory;
 
 import javax.swing.*;
 import java.rmi.RemoteException;
+import java.util.List;
 
 // There can only be 1 ResultSet opened per statement
 // so no simultaneous use of the statement object
@@ -24,6 +27,8 @@ public class      R_StockRW
 {
   private static final long serialVersionUID = 1;
   private StockRW aStockRW = null;
+  LocalMiddleFactory factory = new LocalMiddleFactory();
+  StockR aStockR = factory.aStockR;
 
   /**
    * All transactions are done via StockRW to ensure
@@ -115,4 +120,12 @@ public class      R_StockRW
   {
     aStockRW.modifyStock( product );
   }
+
+
+  @Override
+  public List<Product> getProductNumbers() throws RemoteException, StockException {
+    return aStockR.getProductNumbers(); // Delegate the call to the StockR implementation
+  }
+
+
 }

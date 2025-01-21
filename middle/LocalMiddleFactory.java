@@ -19,14 +19,19 @@ import orders.Order;
 
 public class LocalMiddleFactory implements MiddleFactory
 {
-  private static StockR  aStockR  = null;
+  public StockR  aStockR = null;
   private static StockRW aStockRW = null;
   private static Order   aOrder   = null;
+
+  public LocalMiddleFactory() throws StockException {
+    aStockR = new StockR();
+  }
   
   /**
    * Return an object to access the database for read only access.
    * All users share this same object.
    */
+
   
   public StockReader makeStockReader() throws StockException
   {
