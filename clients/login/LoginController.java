@@ -34,10 +34,10 @@ public class LoginController {
             }
 
     private class LoginButtonListener implements ActionListener{
-        @Override
+        @Override //validates user credentials and navigates to employee menu
         public void actionPerformed(ActionEvent e) {
             System.out.println("mainApp in LoginButtonListener: " + mainApp);
-            String username = view.getUsername();
+            String username = view.getUsername(); //retrieves user input
             String password = view.getPassword();
 
             if (mainApp == null) {
@@ -45,7 +45,7 @@ public class LoginController {
                 return;
             }
 
-            if (model.validateCredentials(username, password)) {
+            if (model.validateCredentials(username, password)) { // validates credentials
                 System.out.println("Login successful, closing login window.");
                 view.setVisible(false);
                 LoginClient.closeLoginView();
@@ -89,7 +89,7 @@ public class LoginController {
     }
 
     private class GuestButtonListener implements ActionListener{
-        @Override
+        @Override //listener for guest button, navigates to customer client
         public void actionPerformed(ActionEvent e) {
             if (mainApp != null) {
                 System.out.println("Guest login, closing login window.");

@@ -15,10 +15,7 @@ import java.util.*;
 
 public class CustomerView implements Observer
 {
-  class Name {  // Names of buttons
-    public static final String CHECK = "Check";
-    public static final String CLEAR = "Clear";
-  }
+
 
   private static final int H = 300;  // Height of window pixels
   private static final int W = 400;  // Width  of window pixels
@@ -27,7 +24,6 @@ public class CustomerView implements Observer
   private final JLabel theAction = new JLabel();
   private final JTextField theInput = new JTextField();
   private final JTextArea theOutput = new JTextArea();
-  private final JScrollPane theSP = new JScrollPane();
   private final JButton backButton;
   private JFrame parentFrame;
 
@@ -71,7 +67,7 @@ public class CustomerView implements Observer
 
     productInfoField = new JTextArea();
     productInfoField.setEditable(false);
-    productInfoField.setBounds(400, 350, 100, 100);
+    productInfoField.setBounds(400, 350, 200, 100);
     cp.add(productInfoField);
 
     pageTitle.setText("Catalogue");

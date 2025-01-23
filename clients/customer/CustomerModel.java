@@ -19,7 +19,6 @@ import java.awt.*;
  */
 public class CustomerModel extends Observable
 {
-  private Product     theProduct = null;          // Current product
   private Basket      theBasket  = null;          // Bought items
 
   private String      pn = "";                    // Product being processed

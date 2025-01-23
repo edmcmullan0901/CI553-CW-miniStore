@@ -38,7 +38,6 @@ public class Main
   private boolean cashierStarted = false;
   private boolean customerStarted = false;
   private MiddleFactory mlf;
-  private static Main mainApp;
   private JFrame window;
 
   public static void main (String args[]) throws StockException {
@@ -53,9 +52,9 @@ public class Main
 
     mlf = new LocalMiddleFactory();
     System.out.println("Main mlf initialized: " + mlf);
-    System.out.println("Main instance before passing: " + this);
+    System.out.println("Main instance before passing: " + this); // debugging
     LoginClient.getInstance(this, mlf);
-    System.out.println("Main instance before passing: " + this);
+    System.out.println("Main instance before passing: " + this); // debugging
 
 
 
@@ -65,12 +64,12 @@ public class Main
     frame.setSize(800, 600);
     frame.setLocationRelativeTo(null);
 
-    //DEBUG.set(true); /* Lots of debug info */
-     // Direct access
 
 
   }
 
+
+  //Methods for checking if clients are started
   public boolean isCashierStarted() {
     return cashierStarted;
   }
@@ -83,7 +82,7 @@ public class Main
   public boolean isPackingStarted() {
     return packingStarted;
   }
-
+  //marks clients as started
   public void setCashierStarted(boolean cashierStarted) {
     this.cashierStarted = cashierStarted;
   }
